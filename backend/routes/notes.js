@@ -22,7 +22,7 @@ router.get('/fetchAllNotes', fetchUser, async (req, res) => {
 // ROUTE 2: Add Note using: POST "/api/auth/addNote". Login required.
 router.post('/addNote', fetchUser, [
     body('title', 'Title must be at least 3 characters').isLength({ min: 3 }),
-    body('description', 'Description must be at least 5 characters.').isLength({ min: 8 }),
+    body('description', 'Description must be at least 5 characters.').isLength({ min: 5 }),
 ], async (req, res) => {
     try {
         const { title, description, tag } = req.body;
@@ -67,7 +67,7 @@ router.put('/updateNote/:id', fetchUser, async (req, res) => {
             return res.status(401).send("Not Allowed")
         }
         note = await Note.findByIdAndUpdate(req.params.id, { $set: newNote }, { new: true });
-        res.json({ note });
+        res.json({ success: "Note Updated Successfully." });
     }
     catch (error) {
         console.error(error.message);

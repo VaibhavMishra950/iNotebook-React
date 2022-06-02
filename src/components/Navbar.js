@@ -1,12 +1,16 @@
-import React, {useEffect} from 'react'
-import { Link, useLocation } from "react-router-dom";
+import React from 'react'
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
-function Navbar() {
+function Navbar(props) {
+    const navigate = useNavigate();
 
     let location = useLocation();
-    useEffect(() => {
-      console.log(location.pathname)
-    }, [location])
+
+    const handleLogout = ()=>{
+        localStorage.removeItem('token');
+        navigate("/login")
+        props.showAlert("success", "Logged Out Successfully", "fa-solid fa-circle-check")
+    }
     
 
     return (
@@ -25,10 +29,10 @@ function Navbar() {
                                 <Link className={`nav-link ${location.pathname==='/about'?'active':'' }`} to="/about">About</Link>
                             </li> 
                         </ul>
-                        <form className="d-flex">
-                            <input className="form-control me-2" type="search" placeholder="Search" aria-label="Search"/>
-                                <button className="btn btn-outline-success" type="submit">Search</button>
-                        </form>
+                        { !localStorage.getItem('token') ? <form className="d-flex">
+                            <Link className="btn btn-outline-light mx-1" to="/login">Login</Link>
+                            <Link className="btn btn-outline-light mx-1" to="/signup">Register</Link>
+                        </form> : <button className='btn btn-outline-light' onClick={handleLogout}>Logout</button>}
                     </div>
                 </div>
             </nav>
